@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 
@@ -18,6 +17,7 @@ interface Subheading {
   content_id: number;
   title: string;
   position: number;
+  subheading_id: number;
 }
 
 interface SubheadingContent {
@@ -37,15 +37,15 @@ const CourseDetail = () => {
     useState<SubheadingContent | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image", "code-block"],
-      ["clean"],
-    ],
-  };
+  // const modules = {
+  //   toolbar: [
+  //     [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  //     ["bold", "italic", "underline", "strike"],
+  //     [{ list: "ordered" }, { list: "bullet" }],
+  //     ["link", "image", "code-block"],
+  //     ["clean"],
+  //   ],
+  // };
 
   useEffect(() => {
     fetchCourseDetails();

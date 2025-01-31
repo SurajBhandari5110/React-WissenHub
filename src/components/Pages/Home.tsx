@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Nav from "./Nav";
 import CourseCard from "./CourseCard";
 import axios from "axios";

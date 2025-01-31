@@ -1,7 +1,6 @@
 import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from "./components/Pages/Home";
-import CourseCard from "./components/Pages/CourseCard";
 import CourseDetail from "./components/Pages/CourseDetail";
 import Pagedetails from "./components/Pages/Pagedetails";
 
