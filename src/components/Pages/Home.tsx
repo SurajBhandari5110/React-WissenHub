@@ -81,7 +81,7 @@ const Home = () => {
                     <img src="https://img.freepik.com/free-vector/job-interview-concept-illustration_114360-24598.jpg" className="card-img-top" alt="Interview Questions"/>
                     <div className="card-body text-center">
                         <h3 className="h5 fw-bold">Interview Questions</h3>
-                        <p className="text-muted">Practice real-world interview questions curated by experts.</p>
+                        <p className="">Practice real-world interview questions curated by experts.</p>
                         <a href="#" className="btn btn-success">Start Practicing</a>
                     </div>
                 </div>
@@ -93,7 +93,7 @@ const Home = () => {
                     <img src="https://img.freepik.com/free-vector/modern-question-mark-help-support-page_1017-27395.jpg" className="card-img-top" alt="Quizzes"/>
                     <div className="card-body text-center">
                         <h3 className="h5 fw-bold">Quizzes</h3>
-                        <p className="text-muted">Test your skills and reinforce learning with topic-specific quizzes.</p>
+                        <p className="">Test your skills and reinforce learning with topic-specific quizzes.</p>
                         <a href="#" className="btn btn-primary">Take a Quiz</a>
                     </div>
                 </div>
