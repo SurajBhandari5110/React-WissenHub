@@ -15,24 +15,25 @@ const CourseCard: React.FC<CourseCardProps> = ({ image, courseName, courseSlug }
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 w-[300px] h-[400px]">
-        <img 
-            src={image} 
-            alt={courseName} 
-            className="w-full h-[200px] object-cover"
-        />
-        
-        <div className="p-6 flex flex-col justify-center items-center h-[200px]">
-            <h2 className="text-2xl font-bold mb-4 text-center line-clamp-2">{courseName}</h2>
+        <div className="card shadow-lg rounded overflow-hidden" style={{ width: "18rem", height: "25rem" }}>
+            <img 
+                src={image} 
+                alt={courseName} 
+                className="card-img-top" 
+                style={{ height: "200px", objectFit: "cover" }}
+            />
             
-            <button 
-                onClick={handleNavigation} 
-                className="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-colors duration-300"
-            >
-                View Course
-            </button>
+            <div className="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                <h2 className="card-title text-truncate" style={{ maxHeight: "3rem" }}>{courseName}</h2>
+                
+                <button 
+                    onClick={handleNavigation} 
+                    className="btn btn-primary mt-3"
+                >
+                    View Course
+                </button>
+            </div>
         </div>
-    </div>
     )
 }
 

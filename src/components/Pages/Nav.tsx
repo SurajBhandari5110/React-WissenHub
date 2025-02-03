@@ -1,25 +1,77 @@
-import { Link } from 'react-router-dom';
-
+import { useEffect, useState } from "react";
+import logo from "../../assets/white_logo.svg"
 const Nav = () => {
-    return (
-      <div className="w-full flex backdrop-blur-md bg-white/30 justify-between px-14 py-4 fixed top-0 z-50 shadow-lg">
-        <div className="flex gap-1">
-          <img src="" alt="" />
-          <div className="flex gap-1 font-bold text-xl">
-            <h1>Wissen</h1>
-            <h1 className="text-green-600">Hub</h1>
-          </div>
-        </div>
-  
-        <div className="flex gap-4">
-          <Link to="/" className="hover:text-green-400 transition-colors">Home</Link>
-          <Link to="/courses" className="hover:text-green-400 transition-colors">Courses</Link>
-          <Link to="/teacher" className="hover:text-green-400 transition-colors">Our Teachers</Link>
-          <Link to="/about" className="hover:text-green-400 transition-colors">About</Link>
-          <Link to="/contact" className="hover:text-green-400 transition-colors">Contact</Link>
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const body = document.body;
+    body.classList.toggle("dark-mode", darkMode);
+  }, [darkMode]);
+
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark">
+      <div className="container">
+        <a className="navbar-brand" href="/">
+          <img
+            src={logo}
+            alt="Logo"
+            width="40"
+            height="40"
+            className="me-2"
+          />
+          
+
+          Wissen<span>Hub</span>
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <a className="nav-link" href="/">
+                Home
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/">
+                Courses
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/">
+                Our Teachers
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/">
+                About
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/">
+                Contact
+              </a>
+            </li>
+          </ul>
+          <button
+            id="dark-mode-toggle"
+            onClick={() => setDarkMode((prev) => !prev)}
+          >
+            <span>{darkMode ? "🌜" : "🌞"}</span>
+          </button>
         </div>
       </div>
-    );
-  };
-  
-  export default Nav;
+    </nav>
+  );
+};
+
+export default Nav;

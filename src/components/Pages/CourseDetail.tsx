@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
+import Nav from "./Nav";
 
 interface CourseContent {
   content_id: number;
@@ -29,23 +30,10 @@ interface SubheadingContent {
 const CourseDetail = () => {
   const { courseSlug } = useParams();
   const [courseData, setCourseData] = useState<CourseContent[] | null>(null);
-  const [selectedTopic, setSelectedTopic] = useState<CourseContent | null>(
-    null
-  );
+  const [selectedTopic, setSelectedTopic] = useState<CourseContent | null>(null);
   const [subheadings, setSubheadings] = useState<Subheading[] | null>(null);
-  const [subheadingContent, setSubheadingContent] =
-    useState<SubheadingContent | null>(null);
+  const [subheadingContent, setSubheadingContent] = useState<SubheadingContent | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // const modules = {
-  //   toolbar: [
-  //     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  //     ["bold", "italic", "underline", "strike"],
-  //     [{ list: "ordered" }, { list: "bullet" }],
-  //     ["link", "image", "code-block"],
-  //     ["clean"],
-  //   ],
-  // };
 
   useEffect(() => {
     fetchCourseDetails();
@@ -53,11 +41,8 @@ const CourseDetail = () => {
 
   const fetchCourseDetails = async () => {
     try {
-      const response = await axios.get(
-        `http://13.200.57.52/api/course/content-titles/${courseSlug}`
-      );
+      const response = await axios.get(`http://13.200.57.52/api/course/content-titles/${courseSlug}`);
       setCourseData(response.data.data);
-      console.log("fetchCourseDetails", response.data);
       setSelectedTopic(response.data.data[0]);
       if (response.data.data[0]) {
         fetchSubheadings(response.data.data[0].content_id);
@@ -71,11 +56,8 @@ const CourseDetail = () => {
 
   const fetchSubheadings = async (contentId: number) => {
     try {
-      const response = await axios.get(
-        `http://13.200.57.52/api/subheadings/${contentId}`
-      );
+      const response = await axios.get(`http://13.200.57.52/api/subheadings/${contentId}`);
       setSubheadings(response.data.data);
-      console.log("fetchsubheading", response.data);
       if (response.data.data[0]) {
         fetchSubheadingContent(response.data.data[0].id);
       }
@@ -86,25 +68,19 @@ const CourseDetail = () => {
 
   const fetchSubheadingContent = async (subheadingId: number) => {
     try {
-      const response = await axios.get(
-        `http://13.200.57.52/api/subheading-content/${subheadingId}`
-      );
-      console.log("fetchSubheadingContent ", response.data);
+      const response = await axios.get(`http://13.200.57.52/api/subheading-content/${subheadingId}`);
       if (response.data && response.data.data) {
         setSubheadingContent(response.data.data);
-        console.log("Content fetched successfully:", response.data);
       }
     } catch (error) {
-      // Handle the 404 gracefully
       setSubheadingContent(null);
-      console.log("No content available for this subheading yet");
     }
   };
 
   const handleTopicClick = async (topic: CourseContent) => {
     setSelectedTopic(topic);
-    setSubheadings(null); 
-    setSubheadingContent(null); 
+    setSubheadings(null);
+    setSubheadingContent(null);
     await fetchSubheadings(topic.content_id);
   };
 
@@ -113,64 +89,63 @@ const CourseDetail = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="text-center mt-4">Loading...</div>;
   }
 
   return (
-    <div className="pt-10 px-32">
-      {/* <h1 className="text-3xl font-bold">{courseSlug}</h1> */}
-      <div className="flex gap-20 pt-5">
-        <div className="flex flex-col gap-2 w-[300px]">
-          {courseData?.map((topic) => (
-            <div key={topic.content_id}>
-              <div
-                className={`border p-2 h-fit cursor-pointer hover:bg-gray-100 ${
-                  selectedTopic?.content_id === topic.content_id
-                    ? "bg-gray-100"
-                    : ""
-                }`}
-                onClick={() => handleTopicClick(topic)}
-              >
-                {topic.title}
+    <>
+      <Nav/>
+      <div className="container1 pt-4">
+      <div className="row">
+        <div className="col-md-2">
+          <div className="list-group">
+            {courseData?.map((topic) => (
+              <div key={topic.content_id}>
+                <button
+                  className={`list-group-item list-group-item-action ${
+                    selectedTopic?.content_id === topic.content_id ? "active" : ""
+                  }`}
+                  onClick={() => handleTopicClick(topic)}
+                >
+                  {topic.title}
+                </button>
+                {selectedTopic?.content_id === topic.content_id && (
+                  <div className="sub-list ms-3 mt-2">
+                    {subheadings?.map((subheading) => (
+                      <button
+                        key={subheading.id}
+                        className="list-group-item list-group-item-action text-muted"
+                        onClick={() => handleSubheadingClick(subheading)}
+                      >
+                        {subheading.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-
-              {selectedTopic?.content_id === topic.content_id && (
-                <div className="ml-4 mt-2">
-                  {subheadings?.map((subheading) => (
-                    <div
-                      key={subheading.id}
-                      className="cursor-pointer hover:bg-gray-50 p-2 rounded text-sm"
-                      onClick={() => handleSubheadingClick(subheading)}
-                    >
-                      {subheading.title}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-
-        <div className="border p-6 w-[800px]">
-          <div className="flex flex-col gap-4">
+        <div className="col-md-8">
+          <div className="card p-4">
             {subheadingContent ? (
               <div className="mt-2">
                 <div
-                  className="prose prose-lg max-w-none"
+                  className="content-body"
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(subheadingContent.content),
                   }}
                 />
               </div>
             ) : (
-              <div className="mt-2 text-base text-gray-500">
-                Content for this section is coming soon!
-              </div>
+              <div className="text-muted">Choose topic to study, from left nav-bar</div>
             )}
           </div>
         </div>
       </div>
     </div>
+      </>
+    
   );
 };
 
