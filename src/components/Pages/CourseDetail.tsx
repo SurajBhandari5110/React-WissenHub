@@ -27,6 +27,12 @@ interface SubheadingContent {
   content: string;
 }
 
+interface Category {
+  course_id: number;
+  name: string;
+  image: string;
+}
+
 const CourseDetail = () => {
   const { courseSlug } = useParams();
   const [courseData, setCourseData] = useState<CourseContent[] | null>(null);
@@ -34,18 +40,22 @@ const CourseDetail = () => {
   const [subheadings, setSubheadings] = useState<Subheading[] | null>(null);
   const [subheadingContent, setSubheadingContent] = useState<SubheadingContent | null>(null);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchCourseDetails();
-  }, [courseSlug]);
+    fetchCategory();
+  }, []);
 
-  const fetchCourseDetails = async () => {
+  const fetchCourseDetails = async (courseId: number) => {
     try {
-      const response = await axios.get(`http://13.200.57.52/api/course/content-titles/${courseSlug}`);
+      const response = await axios.get(
+        `http://13.200.57.52/api/course/content-titles/${courseId}`
+      );
       setCourseData(response.data.data);
-      setSelectedTopic(response.data.data[0]);
-      if (response.data.data[0]) {
-        fetchSubheadings(response.data.data[0].content_id);
+      if (response.data.data && response.data.data.length > 0) {
+        setSelectedTopic(response.data.data[0]);
+        await fetchSubheadings(response.data.data[0].content_id);
       }
       setLoading(false);
     } catch (error) {
@@ -54,12 +64,27 @@ const CourseDetail = () => {
     }
   };
 
+  const fetchCategory = async () => {
+    try {
+      const res = await axios.get("http://13.200.57.52/api/getcategories/1");
+      setCategories(res.data.data);
+      if (res.data.data.length > 0) {
+        setSelectedCourse(res.data.data[0].course_id);
+        await fetchCourseDetails(res.data.data[0].course_id);
+      }
+    } catch (err) {
+      console.log(err, "error in fetch category");
+    }
+  };
+
   const fetchSubheadings = async (contentId: number) => {
     try {
-      const response = await axios.get(`http://13.200.57.52/api/subheadings/${contentId}`);
+      const response = await axios.get(
+        `http://13.200.57.52/api/subheadings/${contentId}`
+      );
       setSubheadings(response.data.data);
       if (response.data.data[0]) {
-        fetchSubheadingContent(response.data.data[0].id);
+        await fetchSubheadingContent(response.data.data[0].id);
       }
     } catch (error) {
       console.error("Error fetching subheadings:", error);
@@ -68,13 +93,23 @@ const CourseDetail = () => {
 
   const fetchSubheadingContent = async (subheadingId: number) => {
     try {
-      const response = await axios.get(`http://13.200.57.52/api/subheading-content/${subheadingId}`);
+      const response = await axios.get(
+        `http://13.200.57.52/api/subheading-content/${subheadingId}`
+      );
       if (response.data && response.data.data) {
         setSubheadingContent(response.data.data);
       }
     } catch (error) {
       setSubheadingContent(null);
     }
+  };
+
+  const handleCourseClick = (courseId: number) => {
+    setSelectedCourse(courseId);
+    setSelectedTopic(null);
+    setSubheadings(null);
+    setSubheadingContent(null);
+    fetchCourseDetails(courseId);
   };
 
   const handleTopicClick = async (topic: CourseContent) => {
@@ -94,58 +129,84 @@ const CourseDetail = () => {
 
   return (
     <>
-      <Nav/>
+      <Nav />
       <div className="container1 pt-4">
-      <div className="row">
-        <div className="col-md-2">
-          <div className="list-group">
-            {courseData?.map((topic) => (
-              <div key={topic.content_id}>
-                <button
-                  className={`list-group-item list-group-item-action ${
-                    selectedTopic?.content_id === topic.content_id ? "active" : ""
-                  }`}
-                  onClick={() => handleTopicClick(topic)}
-                >
-                  {topic.title}
-                </button>
-                {selectedTopic?.content_id === topic.content_id && (
-                  <div className="sub-list ms-3 mt-2">
-                    {subheadings?.map((subheading) => (
-                      <button
-                        key={subheading.id}
-                        className="list-group-item list-group-item-action text-muted"
-                        onClick={() => handleSubheadingClick(subheading)}
-                      >
-                        {subheading.title}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+        <div className="mb-4 px-3">
+          <div className="d-flex gap-2 flex-wrap">
+            {categories.map((category) => (
+              <button
+                key={category.course_id}
+                onClick={() => handleCourseClick(category.course_id)}
+                className={`btn rounded-pill ${
+                  selectedCourse === category.course_id
+                    ? 'btn-primary'
+                    : 'btn-outline-primary'
+                }`}
+                style={{
+                  fontSize: '0.9rem',
+                  transition: 'all 0.3s ease',
+                  minWidth: '80px'
+                }}
+              >
+                {category.name}
+              </button>
             ))}
           </div>
         </div>
-        <div className="col-md-8">
-          <div className="card p-4">
-            {subheadingContent ? (
-              <div className="mt-2">
-                <div
-                  className="content-body"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(subheadingContent.content),
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="text-muted">Choose topic to study, from left nav-bar</div>
-            )}
+
+        <div className="row">
+          <div className="col-md-2">
+            <div className="list-group">
+              {courseData?.map((topic) => (
+                <div key={topic.content_id}>
+                  <button
+                    className={`list-group-item list-group-item-action ${
+                      selectedTopic?.content_id === topic.content_id
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() => handleTopicClick(topic)}
+                  >
+                    {topic.title}
+                  </button>
+                  {selectedTopic?.content_id === topic.content_id && (
+                    <div className="sub-list ms-3 mt-2">
+                      {subheadings?.map((subheading) => (
+                        <button
+                          key={subheading.id}
+                          className="list-group-item list-group-item-action text-muted"
+                          onClick={() => handleSubheadingClick(subheading)}
+                        >
+                          {subheading.title}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="col-md-8">
+            <div className="card p-4">
+              {subheadingContent ? (
+                <div className="mt-2">
+                  <div
+                    className="content-body"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(subheadingContent.content),
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="text-muted">
+                  Choose topic to study, from left nav-bar
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-      </>
-    
+    </>
   );
 };
 
