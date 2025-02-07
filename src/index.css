@@ -195,11 +195,8 @@ background: rgba(255, 255, 255, 0.3);
   color:  #178adc !important;
   font-weight: bold;
 }
-.active-subheading {
-  color: rgb(53, 51, 51) !important;
-  
-}
+
 .dark-mode .active-topic {
-  color:  rgb(17, 208, 100) !important;
+  color:  rgb(9, 181, 83) !important;
   font-weight: bold;
 }
