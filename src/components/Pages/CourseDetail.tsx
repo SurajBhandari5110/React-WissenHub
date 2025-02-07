@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 import Nav from "./Nav";
@@ -34,7 +34,7 @@ interface Category {
 }
 
 const CourseDetail = () => {
-  const { courseSlug } = useParams();
+  // const { courseSlug } = useParams();
   const [courseData, setCourseData] = useState<CourseContent[] | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<CourseContent | null>(null);
   const [subheadings, setSubheadings] = useState<Subheading[] | null>(null);
@@ -137,16 +137,11 @@ const CourseDetail = () => {
               <button
                 key={category.course_id}
                 onClick={() => handleCourseClick(category.course_id)}
-                className={`btn rounded-pill ${
+                className={`related-course-btn ${
                   selectedCourse === category.course_id
-                    ? 'btn-primary'
-                    : 'btn-outline-primary'
+                    
                 }`}
-                style={{
-                  fontSize: '0.9rem',
-                  transition: 'all 0.3s ease',
-                  minWidth: '80px'
-                }}
+                
               >
                 {category.name}
               </button>
@@ -160,25 +155,25 @@ const CourseDetail = () => {
               {courseData?.map((topic) => (
                 <div key={topic.content_id}>
                   <button
-                    className={`list-group-item list-group-item-action ${
-                      selectedTopic?.content_id === topic.content_id
-                        ? "active"
-                        : ""
-                    }`}
-                    onClick={() => handleTopicClick(topic)}
-                  >
-                    {topic.title}
-                  </button>
+  className={`list-group-item list-group-item-action ${
+    selectedTopic?.content_id === topic.content_id ? "active-topic" : ""
+  }`}
+  onClick={() => handleTopicClick(topic)}
+>
+  {topic.title}
+</button>
                   {selectedTopic?.content_id === topic.content_id && (
                     <div className="sub-list ms-3 mt-2">
                       {subheadings?.map((subheading) => (
                         <button
-                          key={subheading.id}
-                          className="list-group-item list-group-item-action text-muted"
-                          onClick={() => handleSubheadingClick(subheading)}
-                        >
-                          {subheading.title}
-                        </button>
+                        key={subheading.id}
+                        className={`list-group-item list-group-item-action  ${
+                          subheadingContent?.id === subheading.id ? "active-subheading" : ""
+                        }`}
+                        onClick={() => handleSubheadingClick(subheading)}
+                      >
+                        {subheading.title}
+                      </button>
                       ))}
                     </div>
                   )}
@@ -198,7 +193,7 @@ const CourseDetail = () => {
                   />
                 </div>
               ) : (
-                <div className="text-muted">
+                <div className="">
                   Choose topic to study, from left nav-bar
                 </div>
               )}

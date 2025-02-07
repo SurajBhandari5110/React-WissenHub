@@ -25,7 +25,7 @@ h1 {
   font-weight: bold;
 }
 .navbar-brand span {
-  color: #0dcaf0;
+  color: #64b2eb;
 }
 .navbar-nav .nav-link {
   color: #ffffff;
@@ -81,15 +81,19 @@ display: none;
 .related-course-btn {
 flex: 0 0 auto;
 padding: 8px 16px;
-background-color: #343a40;
-color: white;
-border-radius: 20px;
+background-color: #e6e6e6;
+color: #2C3E50 !important;
+border-radius: 14px;
+width: 120px;
 text-decoration: none;
 font-weight: bold;
 transition: 0.3s ease-in-out;
+border: .1em solid #2C3E50;
 }
 .related-course-btn:hover {
-background-color: #0056b3;
+background-color: #64b2eb;
+color: rgb(255, 255, 255) !important;
+border: .1em solid #2C3E50 ;
 }
 .scroll-btn {
 background: rgba(0, 0, 0, 0.5);
@@ -114,22 +118,22 @@ right: -5px;
 }
 .dark-mode .navbar {
   background-color: #000000;
-  color: #f8f9fa!important;
+  color: #f8f9fa;
  
 }
 .dark-mode .list-group-item {
  
   background-color:rgb(0, 0, 0);
-  color: #f8f9fa !important;
+  color: #f8f9fa;
 }
 .dark-mode .list-group-item:hover {
   background-color:rgb(0, 0, 0);
-  color: #f8f9fa !important;
+  color: #f8f9fa ;
 
 }
 .dark-mode .card {
   background-color:rgb(0, 0, 0);
-  color: #f8f9fa !important;
+  color: #f8f9fa ;
 }
 #dark-mode-toggle {
   background-color: transparent;
@@ -151,13 +155,14 @@ right: -5px;
   color: #f8f9fa;
 }
 .dark-mode .navbar-brand span {
-  color:green;
+  color:rgb(0, 210, 91);
 }
 .dark-mode .scroll-container {
 background-color: #1a1a1a;
 }
 .dark-mode .related-course-btn {
-background-color: #218838;
+background-color: #e4e2e2;
+
 }
 .dark-mode .related-course-btn:hover {
 background-color:rgb(0, 141, 61);
@@ -185,4 +190,13 @@ background: rgba(255, 255, 255, 0.3);
 .sub-list{
   font-size:14px !important;
   
+}
+.active-topic {
+  color:  #178adc !important;
+  font-weight: bold;
+}
+
+.dark-mode .active-topic {
+  color:  rgb(9, 181, 83) !important;
+  font-weight: bold;
 }
